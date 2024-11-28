@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <!-- 引入 qrcode.js 库 -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 作者信息 -->
+    <div class="author-info">
+        <span>Created by Mei</span>
+        <a href="https://github.com/meidefanshenzhan" target="_blank">
+            <svg class="github-icon" viewBox="0 0 16 16">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+        </a>
+    </div>
+
+    <main class="container">
+        <h1>二维码生成器</h1>
+        
+        <!-- 输入区域 -->
+        <div class="input-section">
+            <div class="url-input">
+                <input type="text" id="urlInput" placeholder="请输入网址..." />
+                <button id="generateBtn" class="generate-btn">生成二维码</button>
+            </div>
+
+            <!-- 图片选择选项 -->
+            <div class="logo-options">
+                <h3>选择中心图片样式</h3>
+                <div class="options-container">
+                    <button class="option-btn active" data-option="none">无图片</button>
+                    <button class="option-btn" data-option="auto">自动获取Logo</button>
+                    <button class="option-btn" data-option="custom">上传图片</button>
+                </div>
+                <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+            </div>
+
+            <!-- 尺寸选择 -->
+            <div class="size-selector">
+                <label for="sizeSelect">下载尺寸:</label>
+                <select id="sizeSelect">
+                    <option value="256">256 x 256</option>
+                    <option value="512" selected>512 x 512</option>
+                </select>
+                <span>或</span>
+                <div class="custom-size">
+                    <input type="number" id="customSize" placeholder="自定义尺寸" min="128" max="1024">
+                    <span>px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 预览区域 -->
+        <div class="preview-section">
+            <div class="qr-preview">
+                <div id="qrCode"></div>
+                <div class="default-tip">
+                    <svg class="qr-icon" viewBox="0 0 24 24">
+                        <path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 11h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-3 0h2v3h-2v-3zm0 4h2v2h-2v-2zm3 0h3v2h-3v-2z"/>
+                    </svg>
+                    <span>在上方输入网址后点击生成</span>
+                </div>
+                <div class="loading-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <button id="downloadBtn" class="download-btn" disabled>下载二维码</button>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html> 
