@@ -94,17 +94,17 @@ document.addEventListener('DOMContentLoaded', function() {
             // 处理Logo
             if (currentLogoOption === 'auto') {
                 try {
-                    const logoUrl = await getFavicon(url);
-                    await addLogoToQR(logoUrl);
+                    const domain = new URL(url).hostname;
+                    const favicon = `https://icon.horse/icon/${domain}`;
+                    await addLogoToQR(favicon);
                 } catch (error) {
                     console.error('获取网站Logo失败:', error);
-                    alert('无法获取网站Logo，请尝试手动上传或不使用Logo');
                 }
             } else if (currentLogoOption === 'custom' && currentLogo) {
                 await addLogoToQR(currentLogo);
             }
 
-            // 启用载按钮
+            // 启用下载按钮
             downloadBtn.disabled = false;
             downloadBtn.style.opacity = '1';
             downloadBtn.style.cursor = 'pointer';
