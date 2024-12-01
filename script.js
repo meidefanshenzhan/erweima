@@ -6,10 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoUpload = document.getElementById('logoUpload');
     const optionBtns = document.querySelectorAll('.option-btn');
     const loadingSpinner = document.querySelector('.loading-spinner');
-    const sizeSelect = document.getElementById('sizeSelect');
+    const logoSizeSlider = document.getElementById('logoSizeSlider');
+    const customLogoSize = document.getElementById('customLogoSize');
 
     let currentLogo = null;
     let currentLogoOption = 'none';
+    let currentLogoSize = 0.2; // 默认 Logo 大小为二维码的 20%
 
     // 初始状态下禁用下载按钮
     downloadBtn.disabled = true;
@@ -55,6 +57,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // 添加滑块和输入框的事件监听
+    logoSizeSlider.addEventListener('input', handleLogoSizeChange);
+    customLogoSize.addEventListener('input', handleCustomLogoSizeInput);
+
     // 生成二维码函数
     async function generateQRCode() {
         const url = urlInput.value.trim();
@@ -98,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 await addLogoToQR(currentLogo);
             }
 
-            // 启用下载按钮
+            // 启用载按钮
             downloadBtn.disabled = false;
             downloadBtn.style.opacity = '1';
             downloadBtn.style.cursor = 'pointer';
@@ -117,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const img = new Image();
             img.crossOrigin = 'anonymous';
             img.onload = function() {
-                // 获取生成的二维码图片
                 const qrImg = qrCanvas.querySelector('img');
                 if (!qrImg) {
                     reject(new Error('QR code image not found'));
@@ -125,31 +130,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 const canvas = document.createElement('canvas');
-                canvas.width = 256;
-                canvas.height = 256;
+                const size = 256; // 固定二维码大小
+                canvas.width = size;
+                canvas.height = size;
                 const ctx = canvas.getContext('2d');
 
                 // 绘制二维码
-                ctx.drawImage(qrImg, 0, 0, 256, 256);
+                ctx.drawImage(qrImg, 0, 0, size, size);
 
-                // 计算Logo大小和位置
-                const size = canvas.width * 0.2;
-                const x = (canvas.width - size) / 2;
-                const y = (canvas.height - size) / 2;
+                // 使用当前 Logo 大小比例计算 Logo 尺寸
+                const logoSize = size * currentLogoSize;
+                const x = (size - logoSize) / 2;
+                const y = (size - logoSize) / 2;
 
-                // 绘制白色背景
+                // 绘制白色背景圈
                 ctx.fillStyle = '#ffffff';
                 ctx.beginPath();
-                ctx.arc(x + size/2, y + size/2, size/2 + 2, 0, Math.PI * 2);
+                ctx.arc(x + logoSize/2, y + logoSize/2, logoSize/2 + 2, 0, Math.PI * 2);
                 ctx.fill();
 
-                // 绘制Logo
+                // 绘制 Logo
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(x + size/2, y + size/2, size/2, 0, Math.PI * 2);
+                ctx.arc(x + logoSize/2, y + logoSize/2, logoSize/2, 0, Math.PI * 2);
                 ctx.closePath();
                 ctx.clip();
-                ctx.drawImage(img, x, y, size, size);
+                ctx.drawImage(img, x, y, logoSize, logoSize);
                 ctx.restore();
 
                 // 替换原来的二维码图片
@@ -252,5 +258,28 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleError() {
         updatePreviewVisibility(false);
         // ... 其他错误处理逻辑 ...
+    }
+
+    // 处理滑块改变
+    function handleLogoSizeChange(e) {
+        currentLogoSize = parseFloat(e.target.value);
+        customLogoSize.value = Math.round(currentLogoSize * 100);
+        if (currentLogoOption !== 'none') {
+            generateQRCode(); // 重新生成二维码和 Logo
+        }
+    }
+
+    // 处理自定义输入
+    function handleCustomLogoSizeInput(e) {
+        let value = parseInt(e.target.value);
+        if (isNaN(value)) value = 20;
+        value = Math.min(Math.max(value, 10), 30); // 限制在 10-30% 之间
+        
+        currentLogoSize = value / 100;
+        logoSizeSlider.value = currentLogoSize;
+        e.target.value = value;
+        if (currentLogoOption !== 'none') {
+            generateQRCode(); // 重新生成二维码和 Logo
+        }
     }
 }); 

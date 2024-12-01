@@ -40,6 +40,30 @@
                 <input type="file" id="logoUpload" accept="image/*" style="display: none;">
             </div>
 
+            <!-- Logo大小控制 -->
+            <div class="logo-size-control">
+                <h3>Logo大小调整</h3>
+                <div class="size-slider-container">
+                    <input type="range" id="logoSizeSlider" 
+                           min="0.1" max="0.3" step="0.02" value="0.2"
+                           class="size-slider">
+                    <div class="size-labels">
+                        <span>小</span>
+                        <span>中</span>
+                        <span>大</span>
+                    </div>
+                </div>
+                <div class="custom-logo-size">
+                    <label for="customLogoSize">自定义大小:</label>
+                    <div class="size-input-group">
+                        <input type="number" id="customLogoSize" 
+                               min="10" max="30" value="20"
+                               class="custom-size-input">
+                        <span>%</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- 尺寸选择 -->
             <div class="size-selector">
                 <label for="sizeSelect">下载尺寸:</label>
